@@ -1,36 +1,16 @@
-name: Build Salsa64 B3313
-
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
-
+name: Build
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
       image: ps3dev/ps3dev:latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Clonar Salsa64 y dependencias
-        run: |
-          git clone --recursive https://github.com salsa64_src
-          ls -la salsa64_src
-
-      - name: Compilar Salsa64
-        working-directory: ./salsa64_src
-        run: |
-          make clean || true
-          make
-
-      - name: Subir EBOOT compilado
-        uses: actions/upload-artifact@v4
+      - uses: actions/checkout@v4
+      - run: |
+          git clone --recursive https://github.com src
+          cd src && make
+      - uses: actions/upload-artifact@v4
         with:
-          name: Salsa64-B3313-EBOOT
-          path: |
-            salsa64_src/*.self
-            salsa64_src/*.elf
-            salsa64_src/*.bin
-            salsa64_src/*.pkg
+          name: EBOOT
+          path: src/*.self

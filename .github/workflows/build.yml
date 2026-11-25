@@ -1,4 +1,4 @@
-name: Compilar Salsa64 B3313 PS3
+name: Build Salsa64 B3313
 
 on:
   push:
@@ -11,17 +11,17 @@ jobs:
     container:
       image: ps3dev/ps3dev:latest
     steps:
-      - name: Descargar código fuente
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
 
-      - name: Compilar EBOOT
+      - name: Build EBOOT
         run: |
           make clean || true
           make
 
-      - name: Guardar archivos compilados
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: Salsa64-B3313-EBOOT
@@ -30,3 +30,4 @@ jobs:
             *.elf
             *.bin
             *.pkg
+
